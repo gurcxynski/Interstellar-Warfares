@@ -18,7 +18,7 @@ namespace Spaceshooter.Core
         public Vector2 lastVel = Vector2.Zero;
         public bool paused = false;
 
-
+        public List<GameObject> toAdd;
         public Scene()
         {
             Game1.keyboard.OnKeyPressed += KeyPressed;
@@ -29,22 +29,16 @@ namespace Spaceshooter.Core
             player = new();
 
             objects.Add(new EasyEnemy(new Vector2(100, 1)));
-            objects.Add(new EasyEnemy(new Vector2(200, 50)));
-            objects.Add(new EasyEnemy(new Vector2(300, 70)));
+            objects.Add(new EasyEnemy(new Vector2(200, 10)));
+            objects.Add(new EasyEnemy(new Vector2(300, 20)));
             objects.Add(player);
         }
         public void Update(GameTime UpdateTime)
         {
-            List<Laser> added = new();
-
-            // TODO: CHANGE THIS AWFUL CODE
-            try { objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); }); }
-            catch {  }
-
-            CheckCollision();
-
-
-            objects.RemoveAll(item => item.Position.Y < -item.Texture.Height || item.Position.Y > Configuration.windowSize.Y || item.HP <= 0);
+            toAdd = new();
+            objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); });
+            objects.AddRange(toAdd);
+            objects.RemoveAll(item => HitEnemy(item) || item.Position.Y < -item.Texture.Height || item.Position.Y > Configuration.windowSize.Y || item.HP <= 0);
         }
         bool HitEnemy(GameObject laser)
         {
@@ -62,10 +56,6 @@ namespace Spaceshooter.Core
                 }
             }
             return false;
-        }
-        void CheckCollision()
-        {
-            objects.RemoveAll(item => HitEnemy(item));
         }
         void Pause()
         {

@@ -28,7 +28,7 @@ namespace Spaceshooter.GameObjects
 
             if (UpdateTime.TotalGameTime.TotalSeconds - lastShot < shootingSpeed) return;
             lastShot = UpdateTime.TotalGameTime.TotalSeconds;
-            Game1.self.activeScene.objects.Add(new Laser(new(Position.X + Texture.Width / 2, Position.Y - Texture.Height), false));
+            Game1.self.activeScene.toAdd.Add(new Laser(new(Position.X + Texture.Width / 2, Position.Y - Texture.Height), false));
         }
         
     }
