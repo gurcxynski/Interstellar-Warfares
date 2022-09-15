@@ -4,13 +4,13 @@ using Spaceshooter.Core;
 
 namespace Spaceshooter.GameObjects
 {
-    internal class Laser : GameObject
+    public class Laser : GameObject
     {
-        public Laser(Vector2 start)
+        public Laser(Vector2 start, bool hostile)
         {
             Texture = Game1.self.textures["laser"];
             Position = start;
-            Velocity = Configuration.baseLaserVel;
+            Velocity = (hostile ? -1 : 1) * Configuration.baseLaserVel;
         }
     }
 }

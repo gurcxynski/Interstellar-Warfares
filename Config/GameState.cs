@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Spaceshooter.Config
 {
-    public class GameState
+    public static class GameState
     {
-        public bool paused = false;
-        public int level = 0;
-        public Vector2 lastVel = Vector2.Zero;
+        public static int level = 0;
+        public static bool menuEnabled = false;
     }
 }

@@ -13,8 +13,11 @@ namespace Spaceshooter
         private SpriteBatch _spriteBatch;
         public static Game1 self;
 
-        public static EasyKeyboard _keyboard;
-        private Scene _scene;
+        public static EasyKeyboard keyboard;
+        public static EasyMouse mouse;
+
+        public Scene activeScene;
+        Menu _menu;
 
         public Dictionary<string, Texture2D> textures = new();
 
@@ -31,8 +34,11 @@ namespace Spaceshooter
 
         protected override void Initialize()
         {
-            _keyboard = new();
-            _scene = new();
+            keyboard = new();
+            mouse = new();
+
+            activeScene = new();
+            _menu = new();
 
             base.Initialize();
         }
@@ -43,13 +49,20 @@ namespace Spaceshooter
 
             textures["player"] = Content.Load<Texture2D>("space ship");
             textures["laser"] = Content.Load<Texture2D>("laser");
+            textures["button"] = Content.Load<Texture2D>("buttons");
+            textures["enemy1"] = Content.Load<Texture2D>("smallenemy");
 
-            _scene.Initialize();
+            _menu.Initialize();
+            activeScene.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            _scene.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            mouse.Update();
+            keyboard.Update();
+
+            if(GameState.menuEnabled) _menu.Update();
+            else activeScene.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -58,9 +71,26 @@ namespace Spaceshooter
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _scene.Draw(_spriteBatch);
+            _spriteBatch.Begin();
+
+            if (GameState.menuEnabled) _menu.Draw(_spriteBatch);
+            else activeScene.Draw(_spriteBatch);
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void EnableMenu()
+        {
+            _menu.Enable();
+            GameState.menuEnabled = true;
+        }
+
+        public void DisableMenu()
+        {
+            _menu.Disable();
+            GameState.menuEnabled = false;
         }
     }
 }
