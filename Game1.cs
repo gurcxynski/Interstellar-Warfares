@@ -1,24 +1,38 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using space_shooter.EasyInput;
+using Spaceshooter.Config;
+using Spaceshooter.Core;
+using System.Collections.Generic;
 
-namespace space_shooter
+namespace Spaceshooter
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        public static Game1 self;
+
+        public static EasyKeyboard _keyboard;
+        private Scene _scene;
+
+        public Dictionary<string, Texture2D> textures = new();
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            self = this;
+            _graphics.PreferredBackBufferWidth = (int)Configuration.windowSize.X;
+            _graphics.PreferredBackBufferHeight = (int)Configuration.windowSize.Y;
+            _graphics.ApplyChanges();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            _keyboard = new();
+            _scene = new();
 
             base.Initialize();
         }
@@ -27,24 +41,24 @@ namespace space_shooter
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            textures["player"] = Content.Load<Texture2D>("space ship");
+            textures["laser"] = Content.Load<Texture2D>("laser");
+
+            _scene.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
+            _scene.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            _scene.Draw(_spriteBatch);
 
             base.Draw(gameTime);
         }
