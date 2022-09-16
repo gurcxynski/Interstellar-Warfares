@@ -3,7 +3,6 @@ using Spaceshooter.Config;
 using Spaceshooter.Core;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Spaceshooter.GameObjects
 {
@@ -14,10 +13,22 @@ namespace Spaceshooter.GameObjects
         List<Vector2> path;
         double lastTurn = 0;
         int onPath = 0;
-        public Enemy(Vector2 pos, List<Vector2> patharg)
+        public Enemy(Level level, List<Vector2> patharg)
         {
-            Position = pos;
+            Position = Vector2.Zero;
             path = patharg;
+            shootingSpeed = level.EnemyShootingSpeed;
+        }
+        public Enemy(Level level)
+        {
+            Position = Vector2.Zero;
+            Random rnd = new();
+            path = new() {
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y))};
+            shootingSpeed = level.EnemyShootingSpeed;
         }
         float Lerp(float firstFloat, float secondFloat, float by)
         {

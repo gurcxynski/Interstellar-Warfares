@@ -14,7 +14,7 @@ namespace Spaceshooter.GameObjects
         public Player(Level level)
         {
             Texture = Game1.self.textures["player"];
-            Position = new Vector2(Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
+            Position = new (Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
             Velocity = Vector2.Zero;
             HP = level.PlayerHP;
             shootingSpeed = level.PlayerShootingSpeed;

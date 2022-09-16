@@ -1,20 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
+using Spaceshooter.Core;
 using Spaceshooter.GameObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Spaceshooter.EnemyTypes
 {
     internal class EasyEnemy : Enemy
     {
-        public EasyEnemy(Vector2 pos, List<Vector2> patharg): base(pos, patharg)
+        public EasyEnemy(Level level, List<Vector2> patharg): base(level, patharg)
         {
             Texture = Game1.self.textures["enemy1"];
-            shootingSpeed = 2.5;
-            HP = 5;
+            HP = level.SimpleEnemiesHP;
+        }
+        public EasyEnemy(Level level) : base(level)
+        {
+            Texture = Game1.self.textures["enemy1"];
+            HP = level.SimpleEnemiesHP;
         }
     }
 }

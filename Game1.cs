@@ -57,10 +57,13 @@ namespace Spaceshooter
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            textures["back"] = Content.Load<Texture2D>("back");
             textures["player"] = Content.Load<Texture2D>("space ship");
-            textures["laser"] = Content.Load<Texture2D>("laser");
+            textures["laser"] = Content.Load<Texture2D>("laser2");
+            textures["laserEnemy"] = Content.Load<Texture2D>("laser");
             textures["button"] = Content.Load<Texture2D>("buttons");
             textures["enemy1"] = Content.Load<Texture2D>("smallenemy");
+            textures["enemy2"] = Content.Load<Texture2D>("enemy2");
 
 
             string path = "levels.json";
@@ -87,6 +90,8 @@ namespace Spaceshooter
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
+
+            _spriteBatch.Draw(textures["back"], Vector2.Zero, Color.White);
 
             if (state.state == State.GameState.Menu || state.state == State.GameState.Paused) _menu.Draw(_spriteBatch);
             else activeScene.Draw(_spriteBatch);

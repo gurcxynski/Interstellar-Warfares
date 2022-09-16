@@ -6,6 +6,7 @@ using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms.Automation;
 
 namespace Spaceshooter.Core
@@ -22,7 +23,6 @@ namespace Spaceshooter.Core
         public int lives;
 
         public List<GameObject> toAdd;
-        public List<GameObject> toRemove;
         public Scene()
         {
             Game1.keyboard.OnKeyPressed += KeyPressed;
@@ -32,17 +32,16 @@ namespace Spaceshooter.Core
         {
             level = levelArg;
             player = new(level);
-            Random rnd = new();
-            List<Vector2> path = new() {
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-            };
+
             for (int i = 0; i < level.SimpleEnemies; i++)
             {
-                objects.Add(new EasyEnemy(new Vector2(100 * i, 50), path));
-            }
-            lives = level.playerLives;
+                objects.Add(new EasyEnemy(level));
+            };
+            for (int i = 0; i < level.MediumEnemies; i++)
+            {
+                objects.Add(new MediumEnemy(level));
+            };
+            lives = level.PlayerLives;
             objects.Add(player);
         }
         public void Update(GameTime UpdateTime)
@@ -50,24 +49,12 @@ namespace Spaceshooter.Core
             //TODO fix reload in menu timer reset
 
             toAdd = new();
-            toRemove = new();
 
             objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); });
 
-            foreach (var item in objects)
-            {
-                if (HitSomething(item, UpdateTime)) toRemove.Add(item);
-            }
-
             objects.AddRange(toAdd);
-
-            foreach (var item in toRemove)
-            {
-                objects.Remove(item);
-            }
-            toRemove.Clear();
-
-            objects.RemoveAll(item => item.Position.Y < 0 - item.Texture.Height - 50 || item.Position.Y > Configuration.windowSize.Y + 50 || item.HP <= 0);
+            //TODO  fix falling out
+            objects.RemoveAll(item => HitSomething(item, UpdateTime) || item.Position.Y < 0 - item.Texture.Height - 50 || item.Position.Y > Configuration.windowSize.Y + 50 || item.HP <= 0);
 
             Game1.self.state.CheckStatus();
         }
@@ -85,13 +72,13 @@ namespace Spaceshooter.Core
                         {
                             if (now - player.hasBeenHit < 200) return true;
                             player.HP--;
-                            player.hasBeenHit = now;
                             if (player.HP <= 0)
                             {
                                 lives--;
                                 player.HP = level.PlayerHP;
+                                player.hasBeenHit = now;
+                                player.Position = new(Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
                             }
-                            System.Diagnostics.Debug.WriteLine($"lives: {lives} hp: {player.HP}");
                             return true;
                         }
                         return false;
@@ -122,16 +109,16 @@ namespace Spaceshooter.Core
                     Game1.self.state.Pause();
                     break;
                 case Keys.Left:
-                    player.acceleration += new Vector2(-Configuration.basePlayerVel, 0);
+                    player.acceleration = new Vector2(-Configuration.basePlayerVel, player.acceleration.Y);
                     break;
                 case Keys.Up:
-                    player.acceleration += new Vector2(0, -Configuration.basePlayerVel);
+                    player.acceleration = new Vector2(player.acceleration.X, -Configuration.basePlayerVel);
                     break;
                 case Keys.Down:
-                    player.acceleration += new Vector2(0, Configuration.basePlayerVel);
+                    player.acceleration = new Vector2(player.acceleration.X, Configuration.basePlayerVel);
                     break;
                 case Keys.Right:
-                    player.acceleration += new Vector2(Configuration.basePlayerVel, 0);
+                    player.acceleration = new Vector2(Configuration.basePlayerVel, player.acceleration.Y);
                     break;
                 default:
                     break;
@@ -143,16 +130,16 @@ namespace Spaceshooter.Core
             switch (button)
             {
                 case Keys.Left:
-                    player.acceleration -= new Vector2(-Configuration.basePlayerVel, 0);
+                    player.acceleration = new Vector2(0, player.acceleration.Y);
                     break;
                 case Keys.Up:
-                    player.acceleration -= new Vector2(0, -Configuration.basePlayerVel);
+                    player.acceleration = new Vector2(player.acceleration.X, 0);
                     break;
                 case Keys.Down:
-                    player.acceleration -= new Vector2(0, Configuration.basePlayerVel);
+                    player.acceleration = new Vector2(player.acceleration.X, 0);
                     break;
                 case Keys.Right:
-                    player.acceleration -= new Vector2(Configuration.basePlayerVel, 0);
+                    player.acceleration = new Vector2(0, player.acceleration.Y);
                     break;
                 default:
                     break;

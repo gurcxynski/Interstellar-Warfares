@@ -30,7 +30,7 @@ namespace Spaceshooter.Config
             else if(!Game1.self.activeScene.objects.Exists(item => item.GetType().IsSubclassOf(typeof(Enemy))))
             {
                 level++;
-                if (level > Game1.self.levels.levels.Count) state = GameState.GameWon;
+                if (level > Game1.self.levels.levels.Count) state = GameState.Menu;
                 else
                 {
                     Game1.self.activeScene = new();
