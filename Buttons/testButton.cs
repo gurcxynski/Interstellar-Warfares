@@ -11,7 +11,7 @@ namespace Spaceshooter.Buttons
 
         protected override void Action()
         {
-            Game1.self.DisableMenu();
+            Game1.self.state.Play();
         }
     }
 }

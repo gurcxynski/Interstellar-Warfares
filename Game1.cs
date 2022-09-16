@@ -1,9 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using space_shooter.EasyInput;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Windows.Forms;
 
 namespace Spaceshooter
 {
@@ -16,8 +20,13 @@ namespace Spaceshooter
         public static EasyKeyboard keyboard;
         public static EasyMouse mouse;
 
+
+        public State state;
+
+        public Levels levels;
         public Scene activeScene;
         Menu _menu;
+
 
         public Dictionary<string, Texture2D> textures = new();
 
@@ -39,6 +48,7 @@ namespace Spaceshooter
 
             activeScene = new();
             _menu = new();
+            state = new();
 
             base.Initialize();
         }
@@ -52,8 +62,13 @@ namespace Spaceshooter
             textures["button"] = Content.Load<Texture2D>("buttons");
             textures["enemy1"] = Content.Load<Texture2D>("smallenemy");
 
+
+            string path = "levels.json";
+            string jsonString = File.ReadAllText(path);
+            levels = JsonSerializer.Deserialize<Levels>(jsonString);
+
             _menu.Initialize();
-            activeScene.Initialize();
+            activeScene.Initialize(levels.Get(0));
         }
 
         protected override void Update(GameTime gameTime)
@@ -61,7 +76,7 @@ namespace Spaceshooter
             mouse.Update();
             keyboard.Update();
 
-            if(GameState.menuEnabled) _menu.Update();
+            if (state.state == State.GameState.Menu || state.state == State.GameState.Paused) _menu.Update();
             else activeScene.Update(gameTime);
 
             base.Update(gameTime);
@@ -73,24 +88,12 @@ namespace Spaceshooter
 
             _spriteBatch.Begin();
 
-            if (GameState.menuEnabled) _menu.Draw(_spriteBatch);
+            if (state.state == State.GameState.Menu || state.state == State.GameState.Paused) _menu.Draw(_spriteBatch);
             else activeScene.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        public void EnableMenu()
-        {
-            _menu.Enable();
-            GameState.menuEnabled = true;
-        }
-
-        public void DisableMenu()
-        {
-            _menu.Disable();
-            GameState.menuEnabled = false;
         }
     }
 }

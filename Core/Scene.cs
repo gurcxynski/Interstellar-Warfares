@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using Spaceshooter.Config;
 using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Windows.Forms.Automation;
 
 namespace Spaceshooter.Core
 {
@@ -18,129 +18,146 @@ namespace Spaceshooter.Core
         public Level level;
 
         public Vector2 lastVel = Vector2.Zero;
-        public bool paused = false;
+
+        public int lives;
 
         public List<GameObject> toAdd;
+        public List<GameObject> toRemove;
         public Scene()
         {
             Game1.keyboard.OnKeyPressed += KeyPressed;
             Game1.keyboard.OnKeyReleased += KeyReleased;
         }
-        public void Initialize()
+        public void Initialize(Level levelArg)
         {
-
-
-            string fileName = "C:\\Users\\wojci\\source\\repos\\space shooter\\levels.json";
-            string jsonString = File.ReadAllText(fileName);
-            level = JsonSerializer.Deserialize<Level>(jsonString);
-
+            level = levelArg;
             player = new(level);
-
+            Random rnd = new();
+            List<Vector2> path = new() {
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+            };
             for (int i = 0; i < level.SimpleEnemies; i++)
             {
-                objects.Add(new EasyEnemy(new Vector2(100 * i, 50)));
+                objects.Add(new EasyEnemy(new Vector2(100 * i, 50), path));
             }
-
+            lives = level.playerLives;
             objects.Add(player);
         }
         public void Update(GameTime UpdateTime)
         {
+            //TODO fix reload in menu timer reset
+
             toAdd = new();
+            toRemove = new();
+
             objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); });
-            objects.AddRange(toAdd);
-            objects.RemoveAll(item => HitEnemy(item) || HitPlayer(item) || item.Position.Y < -item.Texture.Height || item.Position.Y > Configuration.windowSize.Y || item.HP <= 0);
-        }
-        bool HitEnemy(GameObject laser)
-        {
-            if (laser.GetType() != typeof(Laser) || laser.Velocity.Y > 0) return false;
-            foreach (var enemy in objects)
+
+            foreach (var item in objects)
             {
-                if (enemy.GetType().IsSubclassOf(typeof(Enemy)))
-                {
-                    if (laser.Position.X + laser.Texture.Width >= enemy.Position.X  && laser.Position.X <= enemy.Position.X + enemy.Texture.Width
-                        && laser.Position.Y <= enemy.Position.Y + enemy.Texture.Height)
-                    {
-                        enemy.HP -= 1;
-                        return true;
-                    }
-                }
+                if (HitSomething(item, UpdateTime)) toRemove.Add(item);
             }
-            return false;
+
+            objects.AddRange(toAdd);
+
+            foreach (var item in toRemove)
+            {
+                objects.Remove(item);
+            }
+            toRemove.Clear();
+
+            objects.RemoveAll(item => item.Position.Y < 0 - item.Texture.Height - 50 || item.Position.Y > Configuration.windowSize.Y + 50 || item.HP <= 0);
+
+            Game1.self.state.CheckStatus();
         }
-        bool HitPlayer(GameObject laser)
+
+        bool HitSomething(GameObject item, GameTime UpdateTime)
         {
-            if (laser.GetType() != typeof(Laser) || laser.Velocity.Y < 0) return false;
-                if (laser.Position.X + laser.Texture.Width >= player.Position.X  && laser.Position.X <= player.Position.X + player.Texture.Width
-                    && laser.Position.Y + laser.Texture.Height >= player.Position.Y)
-                {
-                    player.HP -= 1;
-                    return true;
-                }
-            return false;
-        }
-        void Pause()
-        {
-            objects.ForEach(delegate (GameObject item) { if (paused) item.UnPause(); else item.Pause(); });
-            paused = !paused;
+            double now = UpdateTime.TotalGameTime.TotalMilliseconds;
+            switch (item)
+            {
+                case Laser laser:
+                    if (laser.hostile)
+                    {
+                        if (laser.Position.Y + laser.Texture.Height > player.Position.Y && laser.Position.Y < player.Position.Y + player.Texture.Height
+                            && laser.Position.X + laser.Texture.Width > player.Position.X && laser.Position.X < player.Position.X + player.Texture.Width)
+                        {
+                            if (now - player.hasBeenHit < 200) return true;
+                            player.HP--;
+                            player.hasBeenHit = now;
+                            if (player.HP <= 0)
+                            {
+                                lives--;
+                                player.HP = level.PlayerHP;
+                            }
+                            System.Diagnostics.Debug.WriteLine($"lives: {lives} hp: {player.HP}");
+                            return true;
+                        }
+                        return false;
+                    }
+                    foreach (var obj in objects)
+                    {
+                        if(!laser.hostile && obj.GetType().IsSubclassOf(typeof(Enemy)))
+                        {
+                            if(laser.Position.Y <= obj.Position.Y + obj.Texture.Height && laser.Position.Y < player.Position.Y + player.Texture.Height
+                                && laser.Position.X + laser.Texture.Width > obj.Position.X && laser.Position.X < obj.Position.X + obj.Texture.Width)
+                            {
+                                obj.HP--;
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                default:
+                    return false;
+            }
         }
         void KeyPressed(Keys button)
         {
-            if (GameState.menuEnabled) return;
+            if (Game1.self.state.state == State.GameState.Menu) return;
             switch (button)
             {
                 case Keys.Escape:
-                    Game1.self.EnableMenu();
+                    Game1.self.state.Pause();
                     break;
                 case Keys.Left:
-                    if (paused) break;
-                    player.Velocity += new Vector2(-Configuration.basePlayerVel, 0);
+                    player.acceleration += new Vector2(-Configuration.basePlayerVel, 0);
                     break;
                 case Keys.Up:
-                    if (paused) break;
-                    player.Velocity += new Vector2(0, -Configuration.basePlayerVel);
+                    player.acceleration += new Vector2(0, -Configuration.basePlayerVel);
                     break;
                 case Keys.Down:
-                    if (paused) break;
-                    player.Velocity += new Vector2(0, Configuration.basePlayerVel);
+                    player.acceleration += new Vector2(0, Configuration.basePlayerVel);
                     break;
                 case Keys.Right:
-                    if (paused) break;
-                    player.Velocity += new Vector2(Configuration.basePlayerVel, 0);
+                    player.acceleration += new Vector2(Configuration.basePlayerVel, 0);
                     break;
                 default:
                     break;
             }
         }
-
         void KeyReleased(Keys button)
         {
-            if (GameState.menuEnabled) return;
+            if (Game1.self.state.state == State.GameState.Menu) return;
             switch (button)
             {
-                case Keys.Space:
-                    Pause();
-                    break;
                 case Keys.Left:
-                    if (paused) break;
-                    player.Velocity -= new Vector2(-Configuration.basePlayerVel, 0);
+                    player.acceleration -= new Vector2(-Configuration.basePlayerVel, 0);
                     break;
                 case Keys.Up:
-                    if (paused) break;
-                    player.Velocity -= new Vector2(0, -Configuration.basePlayerVel);
+                    player.acceleration -= new Vector2(0, -Configuration.basePlayerVel);
                     break;
                 case Keys.Down:
-                    if (paused) break;
-                    player.Velocity -= new Vector2(0, Configuration.basePlayerVel);
+                    player.acceleration -= new Vector2(0, Configuration.basePlayerVel);
                     break;
                 case Keys.Right:
-                    if (paused) break;
-                    player.Velocity -= new Vector2(Configuration.basePlayerVel, 0);
+                    player.acceleration -= new Vector2(Configuration.basePlayerVel, 0);
                     break;
                 default:
                     break;
             }
         }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             objects.ForEach(delegate (GameObject item) { item.Draw(spriteBatch); });

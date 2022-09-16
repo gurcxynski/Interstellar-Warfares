@@ -6,8 +6,10 @@ namespace Spaceshooter.GameObjects
 {
     public class Laser : GameObject
     {
-        public Laser(Vector2 start, bool hostile)
+        public bool hostile;
+        public Laser(Vector2 start, bool isHostile)
         {
+            hostile = isHostile;
             Texture = Game1.self.textures["laser"];
             Position = start;
             Velocity = (hostile ? -1 : 1) * Configuration.baseLaserVel;

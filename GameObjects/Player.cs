@@ -9,25 +9,29 @@ namespace Spaceshooter.GameObjects
     {
         public double lastShot = 0;
         public double shootingSpeed;
+        public Vector2 acceleration;
+        public double hasBeenHit = 0;
         public Player(Level level)
         {
             Texture = Game1.self.textures["player"];
-            Position = new Vector2(250, 700);
+            Position = new Vector2(Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
             Velocity = Vector2.Zero;
             HP = level.PlayerHP;
             shootingSpeed = level.PlayerShootingSpeed;
-
+            acceleration = new();
         }
 
         public override void Update(GameTime UpdateTime)
         {
-            if (Position.X < 0) Position = new(0, Position.Y);
-            else if (Position.X > Configuration.windowSize.X) Position = new(Configuration.windowSize.X, Position.Y);
+            if (Position.X < 0 || Position.X + Texture.Width > Configuration.windowSize.X) Velocity *= new Vector2(-1, 1);
 
-            if (Position.Y < 0) Position = new(Position.X, 0);
-            else if (Position.Y > Configuration.windowSize.Y) Position = new(Position.X, Configuration.windowSize.Y);
+            if (Position.Y < 0 || Position.Y + Texture.Height > Configuration.windowSize.Y) Velocity *= new Vector2(1, -1);
+
 
             base.Update(UpdateTime);
+
+            Velocity += acceleration;
+            Velocity *= Configuration.dampening;
 
             if (UpdateTime.TotalGameTime.TotalSeconds - lastShot < shootingSpeed) return;
             lastShot = UpdateTime.TotalGameTime.TotalSeconds;
