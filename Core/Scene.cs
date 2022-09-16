@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Spaceshooter.Config;
 using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
-using System;
 using System.Collections.Generic;
-using System.Transactions;
 
 namespace Spaceshooter.Core
 {
@@ -14,6 +12,8 @@ namespace Spaceshooter.Core
     {
         public List<GameObject> objects = new();
         public Player player;
+
+        public Level level;
 
         public Vector2 lastVel = Vector2.Zero;
         public bool paused = false;
@@ -27,6 +27,7 @@ namespace Spaceshooter.Core
         public void Initialize()
         {
             player = new();
+            level = new();
 
             objects.Add(new EasyEnemy(new Vector2(100, 1)));
             objects.Add(new EasyEnemy(new Vector2(200, 10)));
@@ -38,7 +39,7 @@ namespace Spaceshooter.Core
             toAdd = new();
             objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); });
             objects.AddRange(toAdd);
-            objects.RemoveAll(item => HitEnemy(item) || item.Position.Y < -item.Texture.Height || item.Position.Y > Configuration.windowSize.Y || item.HP <= 0);
+            objects.RemoveAll(item => HitEnemy(item) || HitPlayer(item) || item.Position.Y < -item.Texture.Height || item.Position.Y > Configuration.windowSize.Y || item.HP <= 0);
         }
         bool HitEnemy(GameObject laser)
         {
@@ -55,6 +56,17 @@ namespace Spaceshooter.Core
                     }
                 }
             }
+            return false;
+        }
+        bool HitPlayer(GameObject laser)
+        {
+            if (laser.GetType() != typeof(Laser) || laser.Velocity.Y < 0) return false;
+                if (laser.Position.X + laser.Texture.Width >= player.Position.X  && laser.Position.X <= player.Position.X + player.Texture.Width
+                    && laser.Position.Y + laser.Texture.Height >= player.Position.Y)
+                {
+                    player.HP -= 1;
+                    return true;
+                }
             return false;
         }
         void Pause()

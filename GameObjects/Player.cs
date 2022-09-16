@@ -14,6 +14,7 @@ namespace Spaceshooter.GameObjects
             Texture = Game1.self.textures["player"];
             Position = new Vector2(250, 700);
             Velocity = Vector2.Zero;
+            HP = 2;
         }
 
         public override void Update(GameTime UpdateTime)
