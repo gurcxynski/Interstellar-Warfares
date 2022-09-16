@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using space_shooter.EasyInput;
+using Monogame.EasyInput;
 
 namespace Spaceshooter.Core
 {

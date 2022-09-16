@@ -35,7 +35,6 @@ namespace Spaceshooter.Config
                 {
                     Game1.self.activeScene = new();
                     Game1.self.activeScene.Initialize(Game1.self.levels.Get(level));
-                    System.Diagnostics.Debug.WriteLine("loading level " + level);
                 }
             }
         }

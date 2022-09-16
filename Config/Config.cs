@@ -9,5 +9,8 @@ namespace Spaceshooter.Config
         public static Vector2 baseLaserVel = new(0, -600);
         public static float dampening = 0.9f;
         public static int enemySpeed = 100;
+        public static int BossHP = 50;
+        public static int BossLasers = 3;
+        public static double BossShootSpeed = 0.1;
     }
 }

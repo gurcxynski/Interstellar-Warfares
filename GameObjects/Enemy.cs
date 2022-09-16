@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
+using Spaceshooter.EnemyTypes;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,9 @@ namespace Spaceshooter.GameObjects
 {
     public abstract class Enemy : GameObject
     {
-        public double lastShot = 0;
+
+        protected Cannon cannon;
+
         public double shootingSpeed = 1;
         List<Vector2> path;
         double lastTurn = 0;
@@ -42,6 +45,8 @@ namespace Spaceshooter.GameObjects
         }
         public override void Update(GameTime UpdateTime)
         {
+            if (cannon is null) cannon = new(this, new(Texture.Width / 2, Texture.Height), shootingSpeed);
+
             if (lastTurn == 0) lastTurn = UpdateTime.TotalGameTime.TotalSeconds;
 
             double currentlength = (path[(onPath + 1) % path.Count] - path[onPath]).Length();
@@ -58,13 +63,9 @@ namespace Spaceshooter.GameObjects
                 lastTurn = UpdateTime.TotalGameTime.TotalSeconds;
             }
 
-
-
             Position = VectorLerp(path[onPath], path[(onPath + 1) % path.Count], (float)progress);
 
-            if (UpdateTime.TotalGameTime.TotalSeconds - lastShot < shootingSpeed) return;
-            lastShot = UpdateTime.TotalGameTime.TotalSeconds;
-            Game1.self.activeScene.toAdd.Add(new Laser(new(Position.X + Texture.Width / 2, Position.Y + Texture.Height), true));
+            if(GetType() != typeof(Boss)) cannon.Update(UpdateTime);
 
         }
     }

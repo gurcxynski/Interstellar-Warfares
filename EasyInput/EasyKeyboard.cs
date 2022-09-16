@@ -5,7 +5,7 @@
  */
 using Microsoft.Xna.Framework.Input;
 
-namespace space_shooter.EasyInput
+namespace Monogame.EasyInput
 {
     /// <summary>
     /// Callbacks for keyboard button-related events.

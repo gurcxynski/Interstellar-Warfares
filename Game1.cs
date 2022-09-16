@@ -1,13 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using space_shooter.EasyInput;
+using Monogame.EasyInput;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace Spaceshooter
 {
@@ -64,7 +62,8 @@ namespace Spaceshooter
             textures["button"] = Content.Load<Texture2D>("buttons");
             textures["enemy1"] = Content.Load<Texture2D>("smallenemy");
             textures["enemy2"] = Content.Load<Texture2D>("enemy2");
-
+            textures["boss"] = Content.Load<Texture2D>("Turtle");
+            
 
             string path = "levels.json";
             string jsonString = File.ReadAllText(path);

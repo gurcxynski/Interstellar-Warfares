@@ -12,5 +12,6 @@ namespace Spaceshooter.Core
         [JsonInclude] public int SimpleEnemiesHP;
         [JsonInclude] public int MediumEnemies;
         [JsonInclude] public int MediumEnemiesHP;
+        [JsonInclude] public bool Boss;
     }
 }

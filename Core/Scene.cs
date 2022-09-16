@@ -32,7 +32,16 @@ namespace Spaceshooter.Core
         {
             level = levelArg;
             player = new(level);
-
+            Random rnd = new();
+            List<Vector2> bossPath = new()
+            {
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y))};
+        ;
             for (int i = 0; i < level.SimpleEnemies; i++)
             {
                 objects.Add(new EasyEnemy(level));
@@ -41,6 +50,10 @@ namespace Spaceshooter.Core
             {
                 objects.Add(new MediumEnemy(level));
             };
+            if (level.Boss)
+            {
+                objects.Add(new Boss(level, bossPath));
+            }
             lives = level.PlayerLives;
             objects.Add(player);
         }

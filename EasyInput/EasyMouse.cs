@@ -6,7 +6,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace space_shooter.EasyInput
+namespace Monogame.EasyInput
 {
     /// <summary>
     /// All mouse buttons.
