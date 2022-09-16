@@ -1,18 +1,12 @@
-using System.IO;
-using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace Spaceshooter.Core
 {
     public class Level
     {
-        public int ID;
-        public int PlayerHP;
-        public int PlayerShootingSpeed;
-        public int SimpleEnemies;
-        public Level()
-        {
-            string fileName = "D:\\4F\\space-shooter\\levels.json";
-            string jsonString = File.ReadAllText(fileName);
-            ID = JsonSerializer.Deserialize<Level>(jsonString).ID;
-        }
+        [JsonInclude] public int ID;
+        [JsonInclude] public int PlayerHP;
+        [JsonInclude] public double PlayerShootingSpeed;
+        [JsonInclude] public int SimpleEnemies;
     }
 }

@@ -8,13 +8,15 @@ namespace Spaceshooter.GameObjects
     public class Player : GameObject
     {
         public double lastShot = 0;
-        public double shootingSpeed = 0.3;
-        public Player()
+        public double shootingSpeed;
+        public Player(Level level)
         {
             Texture = Game1.self.textures["player"];
             Position = new Vector2(250, 700);
             Velocity = Vector2.Zero;
-            HP = 2;
+            HP = level.PlayerHP;
+            shootingSpeed = level.PlayerShootingSpeed;
+
         }
 
         public override void Update(GameTime UpdateTime)

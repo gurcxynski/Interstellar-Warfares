@@ -1,6 +1,6 @@
 {
-        "ID":"1", 
-        "PlayerHP":10, 
-        "PlayerShootingSpeed":0.5,
-        "SimpleEnemies":3
+  "ID": 1,
+  "PlayerHP": 10,
+  "PlayerShootingSpeed": 0.5,
+  "SimpleEnemies": 3
 }

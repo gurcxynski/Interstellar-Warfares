@@ -5,6 +5,8 @@ using Spaceshooter.Config;
 using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 namespace Spaceshooter.Core
 {
@@ -26,12 +28,19 @@ namespace Spaceshooter.Core
         }
         public void Initialize()
         {
-            player = new();
-            level = new();
 
-            objects.Add(new EasyEnemy(new Vector2(100, 1)));
-            objects.Add(new EasyEnemy(new Vector2(200, 10)));
-            objects.Add(new EasyEnemy(new Vector2(300, 20)));
+
+            string fileName = "C:\\Users\\wojci\\source\\repos\\space shooter\\levels.json";
+            string jsonString = File.ReadAllText(fileName);
+            level = JsonSerializer.Deserialize<Level>(jsonString);
+
+            player = new(level);
+
+            for (int i = 0; i < level.SimpleEnemies; i++)
+            {
+                objects.Add(new EasyEnemy(new Vector2(100 * i, 50)));
+            }
+
             objects.Add(player);
         }
         public void Update(GameTime UpdateTime)
