@@ -38,15 +38,7 @@ namespace Spaceshooter.Core
             player = new(level);
 
             Random rnd = new();
-            List<Vector2> bossPath = new()
-            {
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y))};
-        ;
+            
             for (int i = 0; i < level.SimpleEnemies; i++)
             {
                 objects.Add(new EasyEnemy(level));
@@ -57,15 +49,15 @@ namespace Spaceshooter.Core
             };
             if (level.Boss)
             {
-                objects.Add(new Boss(level, bossPath));
+                objects.Add(new Boss(level));
             }
             lives = level.PlayerLives;
             objects.Add(player);
-            ShowScreen(2000, Game1.self.textures["levelUp"]);
+            ShowScreen(1000, Game1.self.textures["level" + Game1.self.state.level]);
         }
         public void Update(GameTime UpdateTime)
         {
-            //TODO fix reload in menu timer reset
+
             if (drawScreen || Game1.self.state.state == State.GameState.GameWon) return;
 
             toAdd = new();
@@ -91,7 +83,7 @@ namespace Spaceshooter.Core
                         if (laser.Position.Y + laser.Texture.Height > player.Position.Y && laser.Position.Y < player.Position.Y + player.Texture.Height
                             && laser.Position.X + laser.Texture.Width > player.Position.X && laser.Position.X < player.Position.X + player.Texture.Width)
                         {
-                            if (now - player.hasBeenHit < 200) return true;
+                            if (now - player.hasBeenHit < 500) return true;
                             player.HP--;
                             if (player.HP <= 0)
                             {
@@ -123,7 +115,7 @@ namespace Spaceshooter.Core
         }
         void KeyPressed(Keys button)
         {
-            if (Game1.self.state.state == State.GameState.Menu) return;
+            if (Game1.self.state.state != State.GameState.Running) return;
             switch (button)
             {
                 case Keys.Escape:
@@ -147,7 +139,7 @@ namespace Spaceshooter.Core
         }
         void KeyReleased(Keys button)
         {
-            if (Game1.self.state.state == State.GameState.Menu) return;
+            if (Game1.self.state.state != State.GameState.Running) return;
             switch (button)
             {
                 case Keys.Left:
@@ -169,14 +161,12 @@ namespace Spaceshooter.Core
         public void Draw(SpriteBatch spriteBatch)
         {
             objects.ForEach(delegate (GameObject item) { item.Draw(spriteBatch); });
-            Texture2D lvlUp = Game1.self.textures["levelUp"];
-            if (drawScreen) spriteBatch.Draw(screen, new Vector2((Configuration.windowSize.X - lvlUp.Width)/2, (Configuration.windowSize.Y - lvlUp.Height) / 2), Color.White);
+            if (drawScreen) spriteBatch.Draw(screen, new Vector2((Configuration.windowSize.X - screen.Width)/2, (Configuration.windowSize.Y - screen.Height) / 2), Color.White);
         }
         void StopScreen(object source, ElapsedEventArgs e)
         {
             Timer.Elapsed -= StopScreen;
             drawScreen = false;
-            if (Game1.self.state.state == State.GameState.GameWon) Game1.self.state.state = State.GameState.Menu;
         }
         void ShowScreen(int time, Texture2D texture)
         {

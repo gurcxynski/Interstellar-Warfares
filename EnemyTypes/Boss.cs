@@ -2,6 +2,7 @@
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 using Spaceshooter.GameObjects;
+using System;
 using System.Collections.Generic;
 
 namespace Spaceshooter.EnemyTypes
@@ -10,16 +11,21 @@ namespace Spaceshooter.EnemyTypes
     {
         int phase;
         List<Cannon> cannons = new();
-        public Boss(Level level, List<Vector2> patharg) : base(level, patharg)
+        public Boss(Level level) : base(level)
         {
-            Texture = Game1.self.textures["boss"];
+            Random rnd = new();
+            Texture = Game1.self.textures["bossnew"];
             HP = Configuration.BossHP;
             phase = Configuration.BossLasers;
-            for(int i = 0; i < Configuration.BossLasers; i++)
+            for (int i = 0; i < Configuration.BossLasers; i++)
             {
-                cannons.Add(new(this, new(i * (float)(Texture.Width)/(Configuration.BossLasers - 1), Texture.Height), Configuration.BossShootSpeed));
+                cannons.Add(new(this, new(i * (float)(Texture.Width) / (Configuration.BossLasers - 1), Texture.Height), Configuration.BossShootSpeed));
             }
-            path = patharg;
+            path = new() {
+                new(rnd.Next(20, (int)Configuration.windowSize.X - 20), rnd.Next(0, (int)Configuration.windowSize.Y/2 - 50)),
+                new(rnd.Next(20, (int)Configuration.windowSize.X - 20), rnd.Next(0, (int)Configuration.windowSize.Y/2 - 50)),
+                new(rnd.Next(20, (int)Configuration.windowSize.X - 20), rnd.Next(0, (int)Configuration.windowSize.Y/2 - 50)),
+                new(rnd.Next(20, (int)Configuration.windowSize.X - 20), rnd.Next(0, (int)Configuration.windowSize.Y/2 - 50))};
         }
         public override void Update(GameTime UpdateTime)
         {

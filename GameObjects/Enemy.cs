@@ -18,19 +18,19 @@ namespace Spaceshooter.GameObjects
         protected int onPath = 0;
         public Enemy(Level level, List<Vector2> patharg)
         {
-            Position = Vector2.Zero;
+            Position = new(-100, -100);
             path = patharg;
             shootingSpeed = level.EnemyShootingSpeed;
         }
         public Enemy(Level level)
         {
-            Position = Vector2.Zero;
+            Position = new(-100, -100);
             Random rnd = new();
             path = new() {
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y)),
-                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y))};
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y - 50)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y - 50)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y - 50)),
+                new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y - 50))};
             shootingSpeed = level.EnemyShootingSpeed;
         }
         protected float Lerp(float firstFloat, float secondFloat, float by)

@@ -1,17 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Spaceshooter.Core;
+
 namespace Spaceshooter.Buttons
 {
-    internal class TestButton : Button
+    internal class ExitGameButton : Button
     {
-        public TestButton(Vector2 arg) : base(arg)
+        public ExitGameButton(int arg) : base(arg)
         {
-
+            texture = Game1.self.textures["exitbutton"];
         }
 
         protected override void Action()
         {
-            Game1.self.state.Play();
+            Game1.self.Exit();
         }
     }
 }

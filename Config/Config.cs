@@ -11,6 +11,6 @@ namespace Spaceshooter.Config
         public static int enemySpeed = 100;
         public static int BossHP = 50;
         public static int BossLasers = 3;
-        public static double BossShootSpeed = 0.7;
+        public static double BossShootSpeed = 0.3;
     }
 }
