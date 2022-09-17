@@ -5,30 +5,19 @@ namespace Spaceshooter.Core
 {
     public class GameObject
     {
-        public int HP = 5;
+        public int HP;
 
-        public Vector2 Velocity { get; set; }
-        public Vector2 Position { get; set; }
-        public Texture2D Texture { get; set; }
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Texture, Position, Color.White);
-        }
+        public Vector2 Velocity;
+        public Vector2 Position;
+        public Texture2D Texture;
+        public virtual void Draw(SpriteBatch spriteBatch) => spriteBatch.Draw(Texture, Position, Color.White);
+
+        // object movement is adjusted by dampering in scene.Update()
 
         public virtual void Update(GameTime UpdateTime)
         {
             float passed = (float)UpdateTime.ElapsedGameTime.TotalSeconds;
             Position += Velocity * passed;
-        }
-        public void UnPause()
-        {
-            Velocity = lastVel;
-            lastVel = Vector2.Zero;
-        }
-        public void Pause()
-        {
-            lastVel = Velocity;
-            Velocity = Vector2.Zero;
         }
     }
 }
