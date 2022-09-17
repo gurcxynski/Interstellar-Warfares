@@ -1,17 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Spaceshooter.GameObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Spaceshooter.Config
 {
     public class State
     {
-        public static int level = 0;
+        public int level = 0;
         public enum GameState
         {
             Menu,
@@ -30,12 +24,13 @@ namespace Spaceshooter.Config
             else if(!Game1.self.activeScene.objects.Exists(item => item.GetType().IsSubclassOf(typeof(Enemy))))
             {
                 level++;
-                if (level > Game1.self.levels.levels.Count) state = GameState.Menu;
+                if (level >= Game1.self.levels.levels.Count) state = GameState.GameWon;
                 else
                 {
                     Game1.self.activeScene = new();
                     Game1.self.activeScene.Initialize(Game1.self.levels.Get(level));
                 }
+
             }
         }
         public bool Pause()

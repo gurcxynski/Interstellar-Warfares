@@ -13,9 +13,9 @@ namespace Spaceshooter.GameObjects
         protected Cannon cannon;
 
         public double shootingSpeed = 1;
-        List<Vector2> path;
-        double lastTurn = 0;
-        int onPath = 0;
+        protected List<Vector2> path;
+        protected double lastTurn = 0;
+        protected int onPath = 0;
         public Enemy(Level level, List<Vector2> patharg)
         {
             Position = Vector2.Zero;
@@ -33,11 +33,11 @@ namespace Spaceshooter.GameObjects
                 new(rnd.Next(0, (int)Configuration.windowSize.X), rnd.Next(0, (int)Configuration.windowSize.Y))};
             shootingSpeed = level.EnemyShootingSpeed;
         }
-        float Lerp(float firstFloat, float secondFloat, float by)
+        protected float Lerp(float firstFloat, float secondFloat, float by)
         {
             return firstFloat * (1 - by) + secondFloat * by;
         }
-        Vector2 VectorLerp(Vector2 firstVector, Vector2 secondVector, float by)
+        protected Vector2 VectorLerp(Vector2 firstVector, Vector2 secondVector, float by)
         {
             float retX = Lerp(firstVector.X, secondVector.X, by);
             float retY = Lerp(firstVector.Y, secondVector.Y, by);
@@ -45,7 +45,7 @@ namespace Spaceshooter.GameObjects
         }
         public override void Update(GameTime UpdateTime)
         {
-            if (cannon is null) cannon = new(this, new(Texture.Width / 2, Texture.Height), shootingSpeed);
+            if (cannon is null && GetType() != typeof(Boss)) cannon = new(this, new(Texture.Width / 2, Texture.Height), shootingSpeed);
 
             if (lastTurn == 0) lastTurn = UpdateTime.TotalGameTime.TotalSeconds;
 

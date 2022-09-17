@@ -49,6 +49,18 @@
 /processorParam:TextureFormat=Color
 /build:enemy2.png
 
+#begin gameWon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gameWon.png
+
 #begin laser.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,6 +85,30 @@
 /processorParam:TextureFormat=Color
 /build:laser2.png
 
+#begin levelUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:levelUp.png
+
+#begin red.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:red.png
+
 #begin smallenemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,6 +132,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:space ship.png
+
+#begin spaceship.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:spaceship.wav
 
 #begin Turtle.png
 /importer:TextureImporter

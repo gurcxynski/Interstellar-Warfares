@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Monogame.EasyInput;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
@@ -12,12 +14,14 @@ namespace Spaceshooter
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private SpriteBatch spriteBatch;
         public static Game1 self;
 
         public static EasyKeyboard keyboard;
         public static EasyMouse mouse;
 
+
+        public SoundEffect music;
 
         public State state;
 
@@ -53,9 +57,12 @@ namespace Spaceshooter
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             textures["back"] = Content.Load<Texture2D>("back");
+            textures["levelUp"] = Content.Load<Texture2D>("levelUp");
+            textures["gameWon"] = Content.Load<Texture2D>("gameWon");
+            textures["red"] = Content.Load<Texture2D>("red");
             textures["player"] = Content.Load<Texture2D>("space ship");
             textures["laser"] = Content.Load<Texture2D>("laser2");
             textures["laserEnemy"] = Content.Load<Texture2D>("laser");
@@ -63,7 +70,12 @@ namespace Spaceshooter
             textures["enemy1"] = Content.Load<Texture2D>("smallenemy");
             textures["enemy2"] = Content.Load<Texture2D>("enemy2");
             textures["boss"] = Content.Load<Texture2D>("Turtle");
-            
+
+            music = Content.Load<SoundEffect>("spaceship");
+
+            var instance = music.CreateInstance();
+            instance.IsLooped = true;
+            instance.Play();
 
             string path = "levels.json";
             string jsonString = File.ReadAllText(path);
@@ -88,14 +100,15 @@ namespace Spaceshooter
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin();
+            spriteBatch.Begin();
 
-            _spriteBatch.Draw(textures["back"], Vector2.Zero, Color.White);
+            spriteBatch.Draw(textures["back"], Vector2.Zero, Color.White);
 
-            if (state.state == State.GameState.Menu || state.state == State.GameState.Paused) _menu.Draw(_spriteBatch);
-            else activeScene.Draw(_spriteBatch);
+            if (state.state == State.GameState.Menu || state.state == State.GameState.Paused) _menu.Draw(spriteBatch);
+            else activeScene.Draw(spriteBatch);
 
-            _spriteBatch.End();
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

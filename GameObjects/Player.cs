@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 using System;
@@ -11,12 +12,13 @@ namespace Spaceshooter.GameObjects
         public double shootingSpeed;
         public Vector2 acceleration;
         public double hasBeenHit = 0;
+        public int MaxHP;
         public Player(Level level)
         {
             Texture = Game1.self.textures["player"];
             Position = new (Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
             Velocity = Vector2.Zero;
-            HP = level.PlayerHP;
+            MaxHP = HP = level.PlayerHP;
             shootingSpeed = level.PlayerShootingSpeed;
             acceleration = new();
         }
@@ -38,5 +40,11 @@ namespace Spaceshooter.GameObjects
             Game1.self.activeScene.toAdd.Add(new Laser(new(Position.X + Texture.Width / 2, Position.Y - Texture.Height), false));
         }
         
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Rectangle rectangle = new((int)Position.X, (int)(Position.Y + Texture.Height), (int)(Texture.Width * ((float)HP)/MaxHP), 4);
+            spriteBatch.Draw(Texture, Position, Color.White);
+            spriteBatch.Draw(Game1.self.textures["red"], rectangle, Color.White);
+        }
     }
 }

@@ -6,8 +6,7 @@ using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms.Automation;
+using System.Timers;
 
 namespace Spaceshooter.Core
 {
@@ -17,6 +16,11 @@ namespace Spaceshooter.Core
         public Player player;
 
         public Level level;
+
+        Timer Timer;
+
+        public bool drawScreen = false;
+        Texture2D screen;
 
         public Vector2 lastVel = Vector2.Zero;
 
@@ -32,6 +36,7 @@ namespace Spaceshooter.Core
         {
             level = levelArg;
             player = new(level);
+
             Random rnd = new();
             List<Vector2> bossPath = new()
             {
@@ -56,10 +61,12 @@ namespace Spaceshooter.Core
             }
             lives = level.PlayerLives;
             objects.Add(player);
+            ShowScreen(2000, Game1.self.textures["levelUp"]);
         }
         public void Update(GameTime UpdateTime)
         {
             //TODO fix reload in menu timer reset
+            if (drawScreen || Game1.self.state.state == State.GameState.GameWon) return;
 
             toAdd = new();
 
@@ -70,6 +77,7 @@ namespace Spaceshooter.Core
             objects.RemoveAll(item => HitSomething(item, UpdateTime) || item.Position.Y < 0 - item.Texture.Height - 50 || item.Position.Y > Configuration.windowSize.Y + 50 || item.HP <= 0);
 
             Game1.self.state.CheckStatus();
+            if (Game1.self.state.state == State.GameState.GameWon) ShowScreen(2000, Game1.self.textures["gameWon"]);
         }
 
         bool HitSomething(GameObject item, GameTime UpdateTime)
@@ -161,7 +169,21 @@ namespace Spaceshooter.Core
         public void Draw(SpriteBatch spriteBatch)
         {
             objects.ForEach(delegate (GameObject item) { item.Draw(spriteBatch); });
+            Texture2D lvlUp = Game1.self.textures["levelUp"];
+            if (drawScreen) spriteBatch.Draw(screen, new Vector2((Configuration.windowSize.X - lvlUp.Width)/2, (Configuration.windowSize.Y - lvlUp.Height) / 2), Color.White);
         }
-        
+        void StopScreen(object source, ElapsedEventArgs e)
+        {
+            Timer.Elapsed -= StopScreen;
+            drawScreen = false;
+            if (Game1.self.state.state == State.GameState.GameWon) Game1.self.state.state = State.GameState.Menu;
+        }
+        void ShowScreen(int time, Texture2D texture)
+        {
+            drawScreen = true;
+            screen = texture;
+            Timer = new(time) { Enabled = true };
+            Timer.Elapsed += StopScreen;
+        }
     }
 }

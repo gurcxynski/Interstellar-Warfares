@@ -2,9 +2,9 @@
 using Spaceshooter.Core;
 namespace Spaceshooter.Buttons
 {
-    internal class testButton : Button
+    internal class TestButton : Button
     {
-        public testButton(Vector2 arg) : base(arg)
+        public TestButton(Vector2 arg) : base(arg)
         {
 
         }

@@ -24,7 +24,7 @@ namespace Spaceshooter.Core
         }
         public void Initialize()
         {
-            buttons.Add(new testButton(new Vector2(100, 100)));
+            buttons.Add(new TestButton(new Vector2(100, 100)));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Spaceshooter.Core
         public Vector2 Velocity { get; set; }
         public Vector2 Position { get; set; }
         public Texture2D Texture { get; set; }
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, Position, Color.White);
         }

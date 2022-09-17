@@ -17,18 +17,20 @@ namespace Spaceshooter.EnemyTypes
             phase = Configuration.BossLasers;
             for(int i = 0; i < Configuration.BossLasers; i++)
             {
-                cannons.Add(new(this, new(i * (Texture.Width)/Configuration.BossLasers, Texture.Height), Configuration.BossShootSpeed));
+                cannons.Add(new(this, new(i * (float)(Texture.Width)/(Configuration.BossLasers - 1), Texture.Height), Configuration.BossShootSpeed));
             }
+            path = patharg;
         }
-        public new void Update(GameTime UpdateTime)
+        public override void Update(GameTime UpdateTime)
         {
             cannons.ForEach(delegate (Cannon item) { item.Update(UpdateTime); });
-            if (HP == 0 && phase > 0)
+            if (HP == 0 && phase > 1)
             {
                 phase--;
                 cannons.RemoveAt(phase);
                 HP = Configuration.BossHP;
             }
+            base.Update(UpdateTime);
         }
     }
 }
