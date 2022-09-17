@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Spaceshooter.GameObjects;
+using Spaceshooter.Menus;
 
 namespace Spaceshooter.Config
 {
@@ -15,17 +16,16 @@ namespace Spaceshooter.Config
             LevelSelect
         }
         public GameState state = GameState.StartMenu;
-        public void CheckStatus()
+        public void UpdateStatus()
         {
-            if (Game1.self.activeScene.lives < 0)
+            if (Game1.self.activeScene.player.lives < 0)
             {
-                state = GameState.StartMenu;
-                ToStartMenu();
+                GameOver();
             }
             else if(!Game1.self.activeScene.objects.Exists(item => item.GetType().IsSubclassOf(typeof(Enemy))))
             {
                 level++;
-                if (level >= Game1.self.levels.levels.Count) state = GameState.GameWon;
+                if (level >= Game1.self.levels.levels.Count) GameWon();
                 else
                 {
                     Game1.self.activeScene = new();
@@ -34,10 +34,27 @@ namespace Spaceshooter.Config
 
             }
         }
+        public bool GameOver()
+        {
+            if(state != GameState.Running) return false;
+            Game1.self.activeScene.SmallPauseButton.Deactivate();
+            Game1.self.starting.Activate();
+            state = GameState.StartMenu;
+            return true;
+        }
+        public bool GameWon()
+        {
+            if (state != GameState.Running) return false;
+            Game1.self.activeScene.SmallPauseButton.Deactivate();
+            Game1.self.starting.Activate();
+            state = GameState.StartMenu;
+            return true;
+        }
         public bool Pause()
         {
             if (state != GameState.Running) return false;
             Game1.self.menu.Activate();
+            Game1.self.activeScene.SmallPauseButton.Deactivate();
             state = GameState.Paused;
             return true;
         }
@@ -59,9 +76,9 @@ namespace Spaceshooter.Config
             {
                 Game1.self.starting.Deactivate();
             }
-            else return false;
             
             Game1.self.levelSelect.Activate();
+
 
             state = GameState.LevelSelect;
             return true;
@@ -69,6 +86,7 @@ namespace Spaceshooter.Config
         public bool Select(int id)
         {
             if (state != GameState.LevelSelect) return false;
+            Game1.self.state.level = id;
             Game1.self.levelSelect.Deactivate();
             state = GameState.Running;
             Game1.self.activeScene = new();
@@ -80,6 +98,7 @@ namespace Spaceshooter.Config
             if(state == GameState.Paused)
             {
                 Game1.self.menu.Deactivate();
+                Game1.self.activeScene.SmallPauseButton.Activate();
             }
             if(state == GameState.StartMenu)
             {

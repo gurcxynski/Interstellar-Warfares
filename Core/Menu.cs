@@ -10,17 +10,26 @@ namespace Spaceshooter.Core
     public abstract class Menu
     {
         readonly protected List<Button> buttons;
-        bool active = false;
-        public Menu()
+
+        public Vector2 Position;
+
+        protected bool isActive = false;
+
+        protected Texture2D back;
+        protected Texture2D title;
+        public Menu() => buttons = new(); 
+        public virtual void Initialize()
         {
-            buttons = new();
+            back = Game1.self.textures["menubck"];
+            title = Game1.self.textures["title"];
+
+            Position = new((Configuration.windowSize.X - back.Width) / 2, 150);
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D back = Game1.self.textures["menubck"];
-            Texture2D title = Game1.self.textures["title"];
-            spriteBatch.Draw(back, new Vector2((Configuration.windowSize.X - back.Width) / 2, 150), Color.White);
             spriteBatch.Draw(title, new Vector2((Configuration.windowSize.X - title.Width) / 2, 20), Color.White);
+
+            spriteBatch.Draw(back, Position, Color.White);
             buttons.ForEach(delegate (Button btn) { btn.Draw(spriteBatch); });
         }
         public void Update()
@@ -29,16 +38,15 @@ namespace Spaceshooter.Core
         }
         public void Activate()
         {
-            if (active) return;
+            if (isActive) return;
             buttons.ForEach(delegate (Button btn) { btn.Activate(); });
-            active = true;
+            isActive = true;
         }
         public void Deactivate()
         {
-            if (!active) return;
+            if (!isActive) return;
             buttons.ForEach(delegate (Button btn) { btn.Deactivate(); });
-            active = false;
+            isActive = false;
         }
-        public abstract void Initialize();
     }
 }

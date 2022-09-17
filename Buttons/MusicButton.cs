@@ -23,5 +23,17 @@ namespace Spaceshooter.Buttons
                 texture = Game1.self.textures["turnonmusic"];
             }
         }
+        public override void Activate()
+        {
+            if (Game1.self.instance.Volume != 0)
+            {
+                texture = Game1.self.textures["turnonmusic"];
+            }
+            else
+            {
+                texture = Game1.self.textures["turnoffmusic"];
+            }
+            base.Activate();
+        }
     }
 }

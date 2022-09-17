@@ -6,12 +6,13 @@ namespace Spaceshooter.Menus
 {
     public class PauseMenu : Menu
     {
-        public override void Initialize()
+        public new void Initialize()
         {
             buttons.Add(new ResumeButton(1));
             buttons.Add(new LevelSelectButton(2));
             buttons.Add(new QuitToStartButton(3));
             buttons.Add(new MusicButton(new(10, Configuration.windowSize.Y - 60)));
+            base.Initialize();
         }
     }
 }

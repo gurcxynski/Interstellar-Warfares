@@ -13,6 +13,7 @@ namespace Spaceshooter.GameObjects
         public Vector2 acceleration;
         public double hasBeenHit = 0;
         public int MaxHP;
+        public int lives;
         public Player(Level level)
         {
             Texture = Game1.self.textures["player"];

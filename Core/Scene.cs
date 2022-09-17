@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spaceshooter.Buttons;
 using Spaceshooter.Config;
 using Spaceshooter.EnemyTypes;
 using Spaceshooter.GameObjects;
-using System;
 using System.Collections.Generic;
 using System.Timers;
 
@@ -13,20 +13,20 @@ namespace Spaceshooter.Core
     public class Scene
     {
         public List<GameObject> objects = new();
+        public List<GameObject> toAdd;
         public Player player;
 
         public Level level;
 
+        public PauseButton SmallPauseButton;
+
         Timer Timer;
 
+        // used when drawing communicates
+
         public bool drawScreen = false;
-        Texture2D screen;
+        Texture2D ScreenToDraw;
 
-        public Vector2 lastVel = Vector2.Zero;
-
-        public int lives;
-
-        public List<GameObject> toAdd;
         public Scene()
         {
             Game1.keyboard.OnKeyPressed += KeyPressed;
@@ -35,62 +35,63 @@ namespace Spaceshooter.Core
         public void Initialize(Level levelArg)
         {
             level = levelArg;
-            player = new(level);
 
-            Random rnd = new();
-            
-            for (int i = 0; i < level.SimpleEnemies; i++)
-            {
-                objects.Add(new EasyEnemy(level));
-            };
-            for (int i = 0; i < level.MediumEnemies; i++)
-            {
-                objects.Add(new MediumEnemy(level));
-            };
-            if (level.Boss)
-            {
-                objects.Add(new Boss(level));
-            }
-            lives = level.PlayerLives;
+            player = new(level) { lives = level.PlayerLives };
             objects.Add(player);
+
+            SmallPauseButton = new(new(Configuration.windowSize.X - 55, 10));
+            SmallPauseButton.Activate();
+
+            // creating enemies as defined in level data
+
+            for (int i = 0; i < level.SimpleEnemies; i++)   { objects.Add(new EasyEnemy(level)); };
+            for (int i = 0; i < level.MediumEnemies; i++)   { objects.Add(new MediumEnemy(level)); };
+            if (level.Boss)                                 { objects.Add(new Boss(level)); }
+
             ShowScreen(1000, Game1.self.textures["level" + Game1.self.state.level]);
         }
         public void Update(GameTime UpdateTime)
         {
+            if (drawScreen) return;
 
-            if (drawScreen || Game1.self.state.state == State.GameState.GameWon) return;
+            SmallPauseButton.Update();
+
+            // updating every object and creating new lasers
 
             toAdd = new();
-
             objects.ForEach(delegate (GameObject item) { item.Update(UpdateTime); });
-
             objects.AddRange(toAdd);
-            //TODO  fix falling out
+
+            //TODO  fix occasional falling out
+
+            // Removing lasers that hit something or have fallen out and dead enemies
+
             objects.RemoveAll(item => HitSomething(item, UpdateTime) || item.Position.Y < 0 - item.Texture.Height - 50 || item.Position.Y > Configuration.windowSize.Y + 50 || item.HP <= 0);
 
-            Game1.self.state.CheckStatus();
-            if (Game1.self.state.state == State.GameState.GameWon) ShowScreen(2000, Game1.self.textures["gameWon"]);
+            Game1.self.state.UpdateStatus();
         }
 
         bool HitSomething(GameObject item, GameTime UpdateTime)
         {
             double now = UpdateTime.TotalGameTime.TotalMilliseconds;
+
             switch (item)
             {
                 case Laser laser:
                     if (laser.hostile)
                     {
+                        // if hostile laser hit player, subtract HP or remove 1 life
                         if (laser.Position.Y + laser.Texture.Height > player.Position.Y && laser.Position.Y < player.Position.Y + player.Texture.Height
                             && laser.Position.X + laser.Texture.Width > player.Position.X && laser.Position.X < player.Position.X + player.Texture.Width)
-                        {
+                           {
                             if (now - player.hasBeenHit < 500) return true;
                             player.HP--;
                             if (player.HP <= 0)
                             {
-                                lives--;
+                                player.lives--;
                                 player.HP = level.PlayerHP;
                                 player.hasBeenHit = now;
-                                player.Position = new(Configuration.windowSize.X / 2, Configuration.windowSize.Y - 100);
+                                player.Position = new((Configuration.windowSize.X - player.Texture.Width) / 2, Configuration.windowSize.Y - 100);
                             }
                             return true;
                         }
@@ -98,6 +99,7 @@ namespace Spaceshooter.Core
                     }
                     foreach (var obj in objects)
                     {
+                        // if player laser hit enemy, subtract HP
                         if(!laser.hostile && obj.GetType().IsSubclassOf(typeof(Enemy)))
                         {
                             if(laser.Position.Y <= obj.Position.Y + obj.Texture.Height && laser.Position.Y < player.Position.Y + player.Texture.Height
@@ -113,9 +115,14 @@ namespace Spaceshooter.Core
                     return false;
             }
         }
+
+        // handling player input
+
         void KeyPressed(Keys button)
         {
             if (Game1.self.state.state != State.GameState.Running) return;
+
+
             switch (button)
             {
                 case Keys.Escape:
@@ -140,6 +147,8 @@ namespace Spaceshooter.Core
         void KeyReleased(Keys button)
         {
             if (Game1.self.state.state != State.GameState.Running) return;
+
+
             switch (button)
             {
                 case Keys.Left:
@@ -158,22 +167,32 @@ namespace Spaceshooter.Core
                     break;
             }
         }
+
+        // drawing everything
+
         public void Draw(SpriteBatch spriteBatch)
         {
             objects.ForEach(delegate (GameObject item) { item.Draw(spriteBatch); });
-            if (drawScreen) spriteBatch.Draw(screen, new Vector2((Configuration.windowSize.X - screen.Width)/2, (Configuration.windowSize.Y - screen.Height) / 2), Color.White);
+
+            SmallPauseButton.Draw(spriteBatch);
+
+            if (drawScreen) spriteBatch.Draw(ScreenToDraw, new Vector2((Configuration.windowSize.X - ScreenToDraw.Width)/2, (Configuration.windowSize.Y - ScreenToDraw.Height) / 2), Color.White);
         }
-        void StopScreen(object source, ElapsedEventArgs e)
-        {
-            Timer.Elapsed -= StopScreen;
-            drawScreen = false;
-        }
+
+        // show texture for given amount of milliseconds
+
         void ShowScreen(int time, Texture2D texture)
         {
+
             drawScreen = true;
-            screen = texture;
+            ScreenToDraw = texture;
             Timer = new(time) { Enabled = true };
-            Timer.Elapsed += StopScreen;
+            Timer.Elapsed += HideScreen;
+        }
+        void HideScreen(object source, ElapsedEventArgs e)
+        {
+            Timer.Elapsed -= HideScreen;
+            drawScreen = false;
         }
     }
 }

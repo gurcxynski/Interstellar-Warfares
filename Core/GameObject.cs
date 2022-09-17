@@ -5,7 +5,6 @@ namespace Spaceshooter.Core
 {
     public class GameObject
     {
-        Vector2 lastVel = Vector2.Zero;
         public int HP = 5;
 
         public Vector2 Velocity { get; set; }

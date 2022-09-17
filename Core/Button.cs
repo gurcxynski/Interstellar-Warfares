@@ -45,7 +45,7 @@ namespace Spaceshooter.Core
                 Action();
             }
         }
-        public void Activate()
+        public virtual void Activate()
         {
             active = true;
             Game1.mouse.OnMouseButtonPressed += OnClick;
