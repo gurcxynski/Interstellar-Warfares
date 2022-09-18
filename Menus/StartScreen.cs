@@ -12,6 +12,7 @@ namespace Spaceshooter.Menus
             buttons.Add(new LevelSelectButton(2));
             buttons.Add(new ExitGameButton(3));
             buttons.Add(new MusicButton(new(10, Configuration.windowSize.Y - 60)));
+
             base.Initialize();
         }
     }

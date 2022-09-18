@@ -81,7 +81,7 @@ namespace Spaceshooter
             starting = new();
             levelSelect = new();
 
-            state = new();
+            state = new() { state = State.GameState.StartMenu };
 
             base.Initialize();
         }
@@ -160,11 +160,7 @@ namespace Spaceshooter
             mouse.Update();
             keyboard.Update();
 
-            if (state.state == State.GameState.Paused) menu.Update();
-            else if (state.state == State.GameState.StartMenu) starting.Update();
-            else if (state.state == State.GameState.LevelSelect) levelSelect.Update();
-            else activeScene.Update(gameTime);
-
+            activeScene.Update(gameTime);
 
             base.Update(gameTime);
         }

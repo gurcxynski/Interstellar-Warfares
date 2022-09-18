@@ -10,7 +10,7 @@ namespace Spaceshooter.Core
     {
         protected Vector2 position;
         protected Texture2D texture;
-        protected bool hovered = false;
+
         protected bool active = false;
         protected Button(int level)
         {
@@ -24,7 +24,7 @@ namespace Spaceshooter.Core
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, hovered ? new Color(0x88FFFFFF) : Color.White);
+            spriteBatch.Draw(texture, position, EnteredButton() ? new Color(0x88FFFFFF) : Color.White);
         }
         protected bool EnteredButton()
         {
@@ -34,13 +34,9 @@ namespace Spaceshooter.Core
                     Game1.mouse.Position.Y > position.Y) return true;
             return false;
         }
-        public virtual void Update()
-        {
-            hovered = EnteredButton();
-        }
         protected void OnClick(MouseButtons button)
         {
-            if (hovered && active && button == MouseButtons.Left)
+            if (EnteredButton() && active && button == MouseButtons.Left)
             {
                 Action();
             }

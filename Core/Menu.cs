@@ -32,10 +32,6 @@ namespace Spaceshooter.Core
             spriteBatch.Draw(back, Position, Color.White);
             buttons.ForEach(delegate (Button btn) { btn.Draw(spriteBatch); });
         }
-        public void Update()
-        {
-            buttons.ForEach(delegate (Button btn) { btn.Update(); });
-        }
         public void Activate()
         {
             if (isActive) return;

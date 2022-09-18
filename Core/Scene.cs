@@ -54,8 +54,6 @@ namespace Spaceshooter.Core
         {
             if (drawScreen) return;
 
-            SmallPauseButton.Update();
-
             // updating every object and creating new lasers
 
             toAdd = new();
