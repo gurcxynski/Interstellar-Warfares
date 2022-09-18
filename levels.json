@@ -1,0 +1,48 @@
+{
+  "levels": [
+    {
+      "PlayerHP": 10,
+      "PlayerLives": 3,
+      "PlayerShootingSpeed": 4,
+      "EnemyShootingSpeed": 2,
+      "SimpleEnemies": 5,
+      "SimpleEnemiesHP": 5,
+      "MediumEnemies": 0,
+      "MediumEnemiesHP": 10,
+      "Boss": false
+    },
+    {
+      "PlayerHP": 10,
+      "PlayerLives": 2,
+      "PlayerShootingSpeed": 4,
+      "EnemyShootingSpeed": 2,
+      "SimpleEnemies": 4,
+      "SimpleEnemiesHP": 5,
+      "MediumEnemies": 2,
+      "MediumEnemiesHP": 10,
+      "Boss": false
+    },
+    {
+      "PlayerHP": 10,
+      "PlayerLives": 2,
+      "PlayerShootingSpeed": 3,
+      "EnemyShootingSpeed": 3,
+      "SimpleEnemies": 5,
+      "SimpleEnemiesHP": 5,
+      "MediumEnemies": 5,
+      "MediumEnemiesHP": 10,
+      "Boss": false
+    },
+    {
+      "PlayerHP": 10,
+      "PlayerLives": 1,
+      "PlayerShootingSpeed": 2,
+      "EnemyShootingSpeed": 4,
+      "SimpleEnemies": 6,
+      "SimpleEnemiesHP": 5,
+      "MediumEnemies": 2,
+      "MediumEnemiesHP": 10,
+      "Boss": true
+    }
+  ]
+}
