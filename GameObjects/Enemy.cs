@@ -76,7 +76,7 @@ namespace Spaceshooter.GameObjects
 
             // shooting lasers
 
-            if(GetType() != typeof(Boss)) cannon.Update(UpdateTime);
+            if (GetType() != typeof(Boss)) cannon.Update(UpdateTime);
 
         }
     }

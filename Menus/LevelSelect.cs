@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Spaceshooter.Buttons;
+﻿using Spaceshooter.Buttons;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 

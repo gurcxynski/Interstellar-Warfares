@@ -5,7 +5,7 @@ namespace Spaceshooter.Buttons
 {
     internal class ChooseLevelButton : Button
     {
-        int id;
+        readonly int id;
         public ChooseLevelButton(int arg) : base(arg)
         {
             id = arg;

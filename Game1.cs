@@ -1,24 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 using Monogame.EasyInput;
-using SharpDX.Direct3D9;
-using Spaceshooter.Buttons;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
 using Spaceshooter.Menus;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Windows.Forms;
 
 namespace Spaceshooter
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch spriteBatch;
 
         public static Game1 self;
@@ -177,8 +172,8 @@ namespace Spaceshooter
             int milliModulo = milliseconds % 10000;
             float offsetPercent = milliModulo / 10000f;
             int offset = (int)(offsetPercent * Configuration.windowSize.Y);
-            var rectA = new Rectangle(0, offset, (int)Configuration.windowSize.X, (int)Configuration.windowSize.Y);
-            var rectB = new Rectangle(0, offset - (int)Configuration.windowSize.Y, (int)Configuration.windowSize.X, (int)Configuration.windowSize.Y);
+            Rectangle rectA = new Rectangle(0, offset, (int)Configuration.windowSize.X, (int)Configuration.windowSize.Y);
+            Rectangle rectB = new Rectangle(0, offset - (int)Configuration.windowSize.Y, (int)Configuration.windowSize.X, (int)Configuration.windowSize.Y);
             spriteBatch.Draw(textures["back"], rectB, Color.White);
             spriteBatch.Draw(textures["back"], rectA, Color.White);
 

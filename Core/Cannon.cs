@@ -5,11 +5,10 @@ namespace Spaceshooter.Core
 {
     public class Cannon
     {
-        GameObject parent; // object that cannon is sticked to
+        readonly GameObject parent; // object that cannon is sticked to
         Vector2 relative; // relative position to parent
-        bool hostile;
-
-        double shootingSpeed;
+        readonly bool hostile;
+        readonly double shootingSpeed;
         public double lastShot = 0;
 
         public Cannon(GameObject parentArg, Vector2 relativeArg, double speed, bool isHostile)

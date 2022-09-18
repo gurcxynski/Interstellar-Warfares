@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Spaceshooter.Config;
-using Spaceshooter.Buttons;
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace Spaceshooter.Core
 {
@@ -17,7 +15,7 @@ namespace Spaceshooter.Core
 
         protected Texture2D back;
         protected Texture2D title;
-        public Menu() => buttons = new(); 
+        public Menu() => buttons = new();
         public virtual void Initialize()
         {
             back = Game1.self.textures["menubck"];

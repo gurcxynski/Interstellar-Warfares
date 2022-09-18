@@ -1,12 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Spaceshooter.Core;
+﻿using Spaceshooter.Core;
 
 namespace Spaceshooter.Buttons
 {
     internal class QuitToStartButton : Button
     {
         public QuitToStartButton(int arg) : base(arg)
-        { 
+        {
             texture = Game1.self.textures["menubutton"];
         }
 

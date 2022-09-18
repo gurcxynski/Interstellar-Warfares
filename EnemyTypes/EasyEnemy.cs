@@ -7,7 +7,7 @@ namespace Spaceshooter.EnemyTypes
 {
     internal class EasyEnemy : Enemy
     {
-        public EasyEnemy(Level level, List<Vector2> patharg): base(level, patharg)
+        public EasyEnemy(Level level, List<Vector2> patharg) : base(level, patharg)
         {
             Texture = Game1.self.textures["enemy1"];
             HP = level.SimpleEnemiesHP;

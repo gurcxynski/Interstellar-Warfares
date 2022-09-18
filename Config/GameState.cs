@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Spaceshooter.GameObjects;
-using Spaceshooter.Menus;
+﻿using Spaceshooter.GameObjects;
 
 namespace Spaceshooter.Config
 {
@@ -24,7 +22,7 @@ namespace Spaceshooter.Config
                 GameOver();
             }
             //if there are no enemies left, advance level
-            else if(!Game1.self.activeScene.objects.Exists(item => item.GetType().IsSubclassOf(typeof(Enemy))))
+            else if (!Game1.self.activeScene.objects.Exists(item => item.GetType().IsSubclassOf(typeof(Enemy))))
             {
                 level++;
                 //if there are no levels left, won
@@ -39,7 +37,7 @@ namespace Spaceshooter.Config
         }
         public bool GameOver()
         {
-            if(state != GameState.Running) return false;
+            if (state != GameState.Running) return false;
             Game1.self.activeScene.SmallPauseButton.Deactivate();
             Game1.self.starting.Activate();
             state = GameState.StartMenu;
@@ -80,8 +78,8 @@ namespace Spaceshooter.Config
             if (state == GameState.Paused)
             {
                 Game1.self.menu.Deactivate();
-            } 
-            else if(state == GameState.StartMenu)
+            }
+            else if (state == GameState.StartMenu)
             {
                 Game1.self.starting.Deactivate();
             }
@@ -106,12 +104,12 @@ namespace Spaceshooter.Config
         }
         public bool Play()
         {
-            if(state == GameState.Paused)
+            if (state == GameState.Paused)
             {
                 Game1.self.menu.Deactivate();
                 Game1.self.activeScene.SmallPauseButton.Activate();
             }
-            if(state == GameState.StartMenu)
+            if (state == GameState.StartMenu)
             {
                 Game1.self.activeScene = new();
                 Game1.self.activeScene.Initialize(Game1.self.levels.Get(level));

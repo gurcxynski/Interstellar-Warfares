@@ -9,7 +9,7 @@ namespace Spaceshooter.EnemyTypes
 {
     internal class Boss : Enemy
     {
-        List<Cannon> cannons = new();
+        readonly List<Cannon> cannons = new();
 
         public Boss(Level level) : base(level)
         {

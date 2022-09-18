@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Monogame.EasyInput;
 using Spaceshooter.Config;
-using System.Linq.Expressions;
 
 namespace Spaceshooter.Core
 {

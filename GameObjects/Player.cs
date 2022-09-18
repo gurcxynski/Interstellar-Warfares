@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Spaceshooter.Config;
 using Spaceshooter.Core;
-using Spaceshooter.EnemyTypes;
-using System;
 
 namespace Spaceshooter.GameObjects
 {
@@ -23,7 +21,7 @@ namespace Spaceshooter.GameObjects
         {
             Texture = Game1.self.textures["player"];
 
-            Position = new ((Configuration.windowSize.X - Texture.Width) / 2, Configuration.windowSize.Y - 100);
+            Position = new((Configuration.windowSize.X - Texture.Width) / 2, Configuration.windowSize.Y - 100);
             Velocity = new();
             acceleration = new();
 
@@ -50,10 +48,10 @@ namespace Spaceshooter.GameObjects
 
             cannon.Update(UpdateTime);
         }
-        
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle rectangle = new((int)Position.X, (int)(Position.Y + Texture.Height + 5), (int)(Texture.Width * ((float)HP)/MaxHP), 4);
+            Rectangle rectangle = new((int)Position.X, (int)(Position.Y + Texture.Height + 5), (int)(Texture.Width * ((float)HP) / MaxHP), 4);
 
             spriteBatch.Draw(Texture, Position, Color.White);
             spriteBatch.Draw(Game1.self.textures["red"], rectangle, Color.White);

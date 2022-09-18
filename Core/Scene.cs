@@ -81,7 +81,7 @@ namespace Spaceshooter.Core
                         // if hostile laser hit player, subtract HP or remove 1 life
                         if (laser.Position.Y + laser.Texture.Height > player.Position.Y && laser.Position.Y < player.Position.Y + player.Texture.Height
                             && laser.Position.X + laser.Texture.Width > player.Position.X && laser.Position.X < player.Position.X + player.Texture.Width)
-                           {
+                        {
                             if (now - player.hasBeenHit < 500) return true;
                             player.HP--;
                             if (player.HP <= 0)
@@ -95,12 +95,12 @@ namespace Spaceshooter.Core
                         }
                         return false;
                     }
-                    foreach (var obj in objects)
+                    foreach (GameObject obj in objects)
                     {
                         // if player laser hit enemy, subtract HP
-                        if(!laser.hostile && obj.GetType().IsSubclassOf(typeof(Enemy)))
+                        if (!laser.hostile && obj.GetType().IsSubclassOf(typeof(Enemy)))
                         {
-                            if(laser.Position.Y <= obj.Position.Y + obj.Texture.Height && laser.Position.Y < player.Position.Y + player.Texture.Height
+                            if (laser.Position.Y <= obj.Position.Y + obj.Texture.Height && laser.Position.Y < player.Position.Y + player.Texture.Height
                                 && laser.Position.X + laser.Texture.Width > obj.Position.X && laser.Position.X < obj.Position.X + obj.Texture.Width)
                             {
                                 obj.HP--;
@@ -174,7 +174,7 @@ namespace Spaceshooter.Core
 
             SmallPauseButton.Draw(spriteBatch);
 
-            if (drawScreen) spriteBatch.Draw(ScreenToDraw, new Vector2((Configuration.windowSize.X - ScreenToDraw.Width)/2, (Configuration.windowSize.Y - ScreenToDraw.Height) / 2), Color.White);
+            if (drawScreen) spriteBatch.Draw(ScreenToDraw, new Vector2((Configuration.windowSize.X - ScreenToDraw.Width) / 2, (Configuration.windowSize.Y - ScreenToDraw.Height) / 2), Color.White);
         }
 
         // show texture for given amount of milliseconds

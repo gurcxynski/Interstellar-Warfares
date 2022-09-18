@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Spaceshooter.Core;
+﻿using Spaceshooter.Core;
 
 namespace Spaceshooter.Buttons
 {
