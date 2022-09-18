@@ -6,8 +6,8 @@ namespace Spaceshooter.Core
     {
         [JsonInclude] public int PlayerHP;
         [JsonInclude] public int PlayerLives;
-        [JsonInclude] public double PlayerShootingSpeed;
-        [JsonInclude] public double EnemyShootingSpeed;
+        [JsonInclude] public float PlayerShootingSpeed;
+        [JsonInclude] public float EnemyShootingSpeed;
         [JsonInclude] public int SimpleEnemies;
         [JsonInclude] public int SimpleEnemiesHP;
         [JsonInclude] public int MediumEnemies;

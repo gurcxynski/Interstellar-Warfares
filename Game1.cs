@@ -123,6 +123,7 @@ namespace Spaceshooter
             textures["select4"] = Content.Load<Texture2D>("select5");
 
             textures["gameWon"] = Content.Load<Texture2D>("Header");
+            textures["gameLost"] = Content.Load<Texture2D>("Header2");
 
             music = Content.Load<SoundEffect>("spaceship");
 
@@ -155,7 +156,10 @@ namespace Spaceshooter
             mouse.Update();
             keyboard.Update();
 
-            activeScene.Update(gameTime);
+            if(state.state == State.GameState.Running || state.state == State.GameState.GameLost || state.state == State.GameState.GameWon) 
+                activeScene.Update(gameTime);
+
+            //System.Diagnostics.Debug.WriteLine(state.state);
 
             base.Update(gameTime);
         }

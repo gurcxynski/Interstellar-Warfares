@@ -20,6 +20,6 @@ namespace Spaceshooter.Config
 
         public static int BossHP = 50;
         public static int BossLasers = 3;
-        public static double BossShootSpeed = 0.3;
+        public static float BossShootSpeed = 3;
     }
 }

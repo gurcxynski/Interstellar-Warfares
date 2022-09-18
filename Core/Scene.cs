@@ -179,9 +179,8 @@ namespace Spaceshooter.Core
 
         // show texture for given amount of milliseconds
 
-        void ShowScreen(int time, Texture2D texture)
+        public void ShowScreen(int time, Texture2D texture)
         {
-
             drawScreen = true;
             ScreenToDraw = texture;
             Timer = new(time) { Enabled = true };

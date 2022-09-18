@@ -11,7 +11,7 @@ namespace Spaceshooter.GameObjects
     {
         protected Cannon cannon;
 
-        public double shootingSpeed;
+        public float shootingSpeed;
 
         protected List<Vector2> path;
         protected int currentPath = 0;

@@ -9,7 +9,7 @@ namespace Spaceshooter.GameObjects
     {
         public double lastShot = 0;
         public double hasBeenHit = 0;
-        public double shootingSpeed;
+        public float shootingSpeed;
         protected Cannon cannon;
 
         public Vector2 acceleration;
