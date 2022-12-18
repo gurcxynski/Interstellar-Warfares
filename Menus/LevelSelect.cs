@@ -8,7 +8,9 @@ namespace Spaceshooter.Menus
     {
         public new void Initialize()
         {
-            for (int i = 0; i < Game1.self.levels.levels.Count; i++)
+            var max = Game1.self.levels.levels.Count;
+            if (max > 9) max = 9;
+            for (int i = 0; i < max; i++)
             {
                 buttons.Add(new ChooseLevelButton(i));
             }

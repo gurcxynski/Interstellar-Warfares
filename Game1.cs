@@ -115,12 +115,20 @@ namespace Spaceshooter
             textures["level2"] = Content.Load<Texture2D>("level3");
             textures["level3"] = Content.Load<Texture2D>("level4");
             textures["level4"] = Content.Load<Texture2D>("level5");
+            textures["level5"] = Content.Load<Texture2D>("level6");
+            textures["level6"] = Content.Load<Texture2D>("level7");
+            textures["level7"] = Content.Load<Texture2D>("level8");
+            textures["level8"] = Content.Load<Texture2D>("level9");
 
             textures["select0"] = Content.Load<Texture2D>("select1");
             textures["select1"] = Content.Load<Texture2D>("select2");
             textures["select2"] = Content.Load<Texture2D>("select3");
             textures["select3"] = Content.Load<Texture2D>("select4");
             textures["select4"] = Content.Load<Texture2D>("select5");
+            textures["select5"] = Content.Load<Texture2D>("select6");
+            textures["select6"] = Content.Load<Texture2D>("select7");
+            textures["select7"] = Content.Load<Texture2D>("select8");
+            textures["select8"] = Content.Load<Texture2D>("select9");
 
             textures["gameWon"] = Content.Load<Texture2D>("Header");
             textures["gameLost"] = Content.Load<Texture2D>("Header2");
